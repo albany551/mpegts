@@ -37,7 +37,7 @@ function HLSPlayer(canvas, manifestUrl, options) {
     if (currentVideo.paused || currentVideo.ended) {
       return;
     }
-    context.drawImage(currentVideo, 0, 0);
+    context.drawImage(currentVideo, 0, 0, canvas.width, canvas.height);
     requestAnimationFrame(nextFrame);
   }
 
@@ -60,13 +60,6 @@ function HLSPlayer(canvas, manifestUrl, options) {
         var video = document.createElement('video'), source = document.createElement('source');
         source.type = 'video/mp4';
         video.appendChild(source);
-
-        video.addEventListener('loadedmetadata', function () {
-          if (canvas.width !== this.videoWidth || canvas.height !== this.videoHeight) {
-            canvas.width = this.width = this.videoWidth;
-            canvas.height = this.height = this.videoHeight;
-          }
-        });
 
         video.addEventListener('play', function () {
           if (currentVideo !== this) {
@@ -140,9 +133,9 @@ function HLSPlayer(canvas, manifestUrl, options) {
     var ajax = new XMLHttpRequest();
     ajax.addEventListener('load', function () {
       var originals =
-        this.responseText
+        this.responseText.trim()
         .split(/\r?\n/)
-        .filter(RegExp.prototype.test.bind(/\.ts$/))
+        .filter( function(line){ return !line.match(/^\s*#/) } )
         .map(resolveURL.bind(null, manifestUrl));
 
       originals = originals.slice(originals.lastIndexOf(lastOriginal) + 1);

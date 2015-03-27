@@ -124,9 +124,9 @@ function HLSPlayer(canvas, manifestUrl, options) {
     var ajax = new XMLHttpRequest();
     ajax.addEventListener('load', function () {
       var originals =
-        this.responseText
+        this.responseText.trim()
         .split(/\r?\n/)
-        .filter(RegExp.prototype.test.bind(/\.ts$/))
+        .filter( function(line){ return !line.match(/^\s*#/) } )
         .map(resolveURL.bind(null, manifestUrl));
 
       originals = originals.slice(originals.lastIndexOf(lastOriginal) + 1);
