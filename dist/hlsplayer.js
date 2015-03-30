@@ -61,6 +61,13 @@ function HLSPlayer(canvas, manifestUrl, options) {
         source.type = 'video/mp4';
         video.appendChild(source);
 
+        video.addEventListener('loadedmetadata', function () {
+          if (canvas.width !== this.videoWidth || canvas.height !== this.videoHeight) {
+            canvas.width = this.width = this.videoWidth;
+            canvas.height = this.height = this.videoHeight;
+          }
+        });
+
         video.addEventListener('play', function () {
           if (currentVideo !== this) {
             if (!currentVideo) {
@@ -132,6 +139,9 @@ function HLSPlayer(canvas, manifestUrl, options) {
   function getMore() {
     var ajax = new XMLHttpRequest();
     ajax.addEventListener('load', function () {
+      if(!worker)
+        return;
+
       var originals =
         this.responseText.trim()
         .split(/\r?\n/)
