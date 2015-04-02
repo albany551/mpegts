@@ -1,6 +1,5 @@
 var gulp = require("gulp");
 var rename = require("gulp-rename");
-var umd = require("gulp-umd");
 var server = require("gulp-server-livereload");
 var fileInsert = require("gulp-file-insert");
 var stripDebug = require('gulp-strip-debug');
@@ -28,10 +27,6 @@ gulp.task("build", function(){
     }))
     .pipe(rename("hlsplayer.js"))
     .pipe(stripDebug())
-    .pipe(umd({
-      exports: function(file) { return "HLSPlayer" },
-      namespace: function(file) { return "HLSPlayer" }
-    }))
     .pipe(gulp.dest("./dist/"));
 });
 

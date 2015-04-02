@@ -1,6 +1,6 @@
 'use strict';
 
-function HLSPlayer(canvas, manifestUrl, options) {
+window.HLSPlayer = function(canvas, manifestUrl, options) {
   options = options || {};
 
   var workerSrc = '/* WORKER_SOURCE_GOES_HERE */';
