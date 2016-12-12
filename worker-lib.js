@@ -130,6 +130,11 @@ window.HLSPlayer = function(canvas, manifestUrl, options) {
   function getMore() {
     var ajax = new XMLHttpRequest();
     ajax.addEventListener('load', function () {
+      if (ajax.status >= 400) {
+        if(typeof(options.error) == "function")
+          options.error();
+        return;
+      }
       if(!worker)
         return;
 
